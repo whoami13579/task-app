@@ -4,10 +4,10 @@ from sqlalchemy.sql import func
 
 
 class User(db.Model, UserMixin):
-    # def __init__(self, email, username, password):
-    #     self.email = email
-    #     self.username = username
-    #     self.password = password
+    def __init__(self, email, username, password):
+        self.email = email
+        self.username = username
+        self.password = password
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)

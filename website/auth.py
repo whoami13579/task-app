@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from flask_login import current_user
+from flask_login import current_user, login_user
 from .models import User
 from werkzeug.security import generate_password_hash
+from . import db
 
 auth = Blueprint("auth", __name__)
 
@@ -24,7 +25,15 @@ def sign_up():
             flash("Email can not be empty.", category="error")
         elif len(username) < 1:
             flash("Username can not be empty.", category="error")
+        elif len(password1) < 6:
+            flash("Password is too short.", category="error")
         else:
             # user = User(email=email, username=username, password=generate_password_hash(password1, method="pbkdf2"))
-            user = User(email=email, username=username, password=password1)
+            user = User(email, username, generate_password_hash(password1, method="pbkdf2"))
+            db.session.add(user)
+            db.session.commit()
+
+            login_user(user, remember=True)
+            return redirect(url_for("views.home"))
+
     return render_template("signup.html", user=current_user)
