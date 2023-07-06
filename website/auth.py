@@ -22,7 +22,7 @@ def login():
                 return redirect(url_for("views.home"))
             else:
                 flash("Password incorrect.", category="error")
-            
+
         else:
             flash("User does not exist.", category="error")
 
@@ -59,6 +59,7 @@ def sign_up():
             return redirect(url_for("views.home"))
 
     return render_template("signup.html", user=current_user)
+
 
 @auth.route("/logout")
 @login_required
