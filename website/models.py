@@ -18,8 +18,17 @@ class User(db.Model, UserMixin):
 
 
 class Task(db.Model):
+    def __init__(self, text, begin, end, author):
+        self.text = text
+        self.begin = begin
+        self.end = end
+        self.author = author
+
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(200), nullable=False)
-    deadline = db.Column(db.DateTime(timezone=True))
+    begin = db.Column(db.DateTime(timezone=True))
+    end = db.Column(db.DateTime(timezone=True))
+    # begin = db.Column(db.Date())
+    # end = db.Column(db.Date())
     author = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id', ondelete="CASCADE"), nullable=False)
+    # task_id = db.Column(db.Integer, db.ForeignKey('task.id', ondelete="CASCADE"), nullable=False)
