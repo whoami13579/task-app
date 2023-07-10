@@ -11,7 +11,7 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
     db.init_app(app)
 
-    from .models import User
+    from .models import User, Task
     with app.app_context():
         db.create_all()
 
