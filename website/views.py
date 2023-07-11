@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash
 from flask_login import current_user, login_required
-from .models import Task
+from .models import User, Task
 from . import db
 from datetime import datetime
 
@@ -34,3 +34,10 @@ def task():
             flash("success", category="success")
 
     return render_template("create_task.html", user=current_user)
+
+
+@views.route("/view-tasks")
+@login_required
+def view_tasks():
+    tasks = Task.query.filter_by(author=current_user.id).all()
+    return render_template("view_tasks.html", user=current_user, tasks=tasks)
