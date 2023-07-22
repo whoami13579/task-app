@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import current_user, login_user, login_required, logout_user
-from .models import User
+from .models import User, Group
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 
@@ -52,7 +52,12 @@ def sign_up():
         else:
             # user = User(email=email, username=username, password=generate_password_hash(password1, method="pbkdf2"))
             user = User(email, username, generate_password_hash(password1, method="pbkdf2"))
+            group = Group(user.username+"\'s private group")
+            user.groups.append(group)
+            group.managers.append(user)
+            group.members.append(user)
             db.session.add(user)
+            db.session.add(group)
             db.session.commit()
 
             login_user(user, remember=True)

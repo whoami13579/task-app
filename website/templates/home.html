@@ -3,5 +3,21 @@
 {% block content %}
 <div align="center">
     <h1>Home Page</h1>
+    {% if user.is_authenticated %}
+    {% for group in user.groups %}
+        <a href="tasks/{{group.id}}">{{group.group_name}}</a>
+        <br/>
+            {% for task in group.tasks %}
+            <h3>
+                {{task.text}}    deadline : {{task.end}}
+            </h3>
+            {% endfor %}
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+    {% endfor %}
+    {% else %}
+    {% endif %}
 </div>
 {% endblock %}

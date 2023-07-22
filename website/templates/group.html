@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{group.group_name}}{% endblock %}
+{% block content %}
+<div align="center">
+    <h1>{{group.group_name}}</h1>
+    {% for task in group.tasks %}
+        <h3>
+            {{task.text}}   deadline : {{task.end}}
+        </h3>
+    {% endfor %}
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <form method="POST">
+        <h1>Task</h1>
+        
+        <h4>Begin(mm/dd/yyyy)</h4>
+        <input type="date" id="begin" name="begin">
+        <br/>
+        <br/>
+        <h4>End(mm/dd/yyyy)</h4>
+        <input type="date" id="end" name="end">
+        <br/>
+        <br/>
+        <br/>
+        <div>
+        </div>
+        <div>
+          <textarea name="text" id="text" class="form-control"></textarea>
+            <br />
+              <div align="center">
+                <button type="submit" class="btn btn-lg btn-primary">Create task</button>
+              </div>
+      </form>
+</div>
+{% endblock %}
