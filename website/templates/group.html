@@ -5,7 +5,8 @@
     <h1>{{group.group_name}}</h1>
     {% for task in group.tasks %}
         <h3>
-            {{task.text}}   deadline : {{task.end}}
+            {{task.text}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deadline : {{task.end}}
+            <a href="/delete/{{task.id}}">delete</a>
         </h3>
     {% endfor %}
     <br/>
@@ -16,11 +17,11 @@
         <h1>Task</h1>
         
         <h4>Begin(mm/dd/yyyy)</h4>
-        <input type="date" id="begin" name="begin">
+        <input type="date" id="begin" name="begin" required>
         <br/>
         <br/>
         <h4>End(mm/dd/yyyy)</h4>
-        <input type="date" id="end" name="end">
+        <input type="date" id="end" name="end" required>
         <br/>
         <br/>
         <br/>

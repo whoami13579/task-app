@@ -1,10 +1,8 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_required
 from .models import User, Task, Group
 from . import db
 from datetime import datetime
-
-current_group_id = 0
 
 views = Blueprint("views", __name__)
 
@@ -29,15 +27,13 @@ def create_group():
         db.session.add(group)
         db.session.commit()
         flash("Group created.", category="success")
-    
+
     return render_template("create_group.html", user=current_user)
 
 
-@views.route("/tasks/<group_id>", methods=["GET", "POST"])
+@views.route("/group/<group_id>", methods=["GET", "POST"])
 @login_required
 def view_group(group_id):
-    global current_group_id
-    current_group_id = group_id
     group = Group.query.filter_by(id=group_id).first()
     if request.method == "POST":
         begin = request.form.get("begin")
@@ -58,3 +54,29 @@ def view_group(group_id):
             db.session.commit()
             flash("success", category="success")
     return render_template("group.html", user=current_user, group=group)
+
+
+@views.route("/delete/<task_id>")
+@login_required
+def delete_task(task_id):
+    task = Task.query.filter_by(id=task_id).first()
+    if not task:
+        return redirect(url_for("views.home"))
+
+    group = Group.query.filter_by(id=task.group[0].id).first()
+    author = User.query.filter_by(id=task.author[0].id).first()
+    managers = []
+    for user in group.managers:
+        managers.append(user.id)
+
+    if current_user.id in managers or current_user.id == task.author:
+        author.tasks.remove(task)
+        group.tasks.remove(task)
+        db.session.delete(task)
+        db.session.commit()
+        flash("Task deleted.", category="success")
+    else:
+        flash("Error", category="error")
+        return redirect(url_for("views.home"))
+
+    return redirect(url_for("views.view_group", group_id=group.id))
