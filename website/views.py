@@ -118,17 +118,17 @@ def leave_group(group_id):
         members = []
         for tmp_user in group.managers:
             managers.append(tmp_user.id)
-        
+
         for tmp_user in group.members:
             members.append(tmp_user.id)
-        
+
         if user.id in managers:
             group.managers.remove(user)
-        
+
         if user.id in members:
             group.members.remove(user)
             user.groups.remove(group)
-        
+
         db.session.commit()
     else:
         flash("error", category="error")
