@@ -80,3 +80,56 @@ def delete_task(task_id):
         return redirect(url_for("views.home"))
 
     return redirect(url_for("views.view_group", group_id=group.id))
+
+
+@views.route("/join-group", methods=["GET", "POST"])
+@login_required
+def join_group():
+    if request.method == "POST":
+        group_name = request.form.get("text")
+        if len(group_name) == 0:
+            flash("Group name can't be empty.", category="error")
+        group = Group.query.filter_by(group_name=group_name).first()
+        if group:
+            members = []
+            for user in group.members:
+                members.append(user.id)
+            if current_user.id in members:
+                pass
+            else:
+                current_user.groups.append(group)
+                group.members.append(current_user)
+                db.session.commit()
+            flash("Joined", category="success")
+        else:
+            flash("Group doesn't exist.", category="error")
+
+    # return redirect(url_for("views.view_group"))
+    return render_template("join.html", user=current_user)
+
+
+@views.route("/leave-group/<group_id>")
+@login_required
+def leave_group(group_id):
+    group = Group.query.filter_by(id=group_id).first()
+    user = User.query.filter_by(id=current_user.id).first()
+    if group and user:
+        managers = []
+        members = []
+        for tmp_user in group.managers:
+            managers.append(tmp_user.id)
+        
+        for tmp_user in group.members:
+            members.append(tmp_user.id)
+        
+        if user.id in managers:
+            group.managers.remove(user)
+        
+        if user.id in members:
+            group.members.remove(user)
+            user.groups.remove(group)
+        
+        db.session.commit()
+    else:
+        flash("error", category="error")
+    return redirect(url_for("views.home", user=current_user))
