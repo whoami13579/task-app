@@ -18,13 +18,14 @@ group_task = db.Table("group_task",
                       )
 
 group_manager = db.Table("group_manager",
-                      db.Column("group_id", db.Integer, db.ForeignKey("group.id")),
-                      db.Column("user_id", db.Integer, db.ForeignKey("user.id"))
-                      )
+                         db.Column("group_id", db.Integer, db.ForeignKey("group.id")),
+                         db.Column("user_id", db.Integer, db.ForeignKey("user.id"))
+                         )
 group_member = db.Table("group_member",
-                      db.Column("group_id", db.Integer, db.ForeignKey("group.id")),
-                      db.Column("user_id", db.Integer, db.ForeignKey("user.id"))
-                      )
+                        db.Column("group_id", db.Integer, db.ForeignKey("group.id")),
+                        db.Column("user_id", db.Integer, db.ForeignKey("user.id"))
+                        )
+
 
 class User(db.Model, UserMixin):
     def __init__(self, email, username, password):

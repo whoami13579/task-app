@@ -4,10 +4,16 @@
 <div align="center">
     <h1>{{group.group_name}}</h1>
     {% for task in group.tasks %}
-        <h3>
+        <!-- <h3>
             {{task.text}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deadline : {{task.end}}
             <a href="/delete/{{task.id}}">delete</a>
-        </h3>
+        </h3> -->
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-text">{{task.text}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deadline : {{task.end}}</h3>
+            <a href="/delete/{{task.id}}">delete</a>
+          </div>
+        </div>
     {% endfor %}
     <br/>
     <br/>
