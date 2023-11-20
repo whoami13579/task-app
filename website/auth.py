@@ -72,3 +72,27 @@ def sign_up():
 def logout():
     logout_user()
     return redirect(url_for("views.home"))
+
+
+@auth.route("/account", methods=["GET", "POST"])
+@login_required
+def account():
+    if request.method == "POST":
+        user = User.query.filter_by(username=current_user.username).first()
+
+        oldPassword = request.form.get("oldPassword")
+        newPassword = request.form.get("newPassword")
+
+        if user:
+            if check_password_hash(current_user.password, oldPassword):
+                if len(newPassword) < 6:
+                    flash("New password is too short", category="error")
+                else:
+                    current_user.password = generate_password_hash(newPassword, method="pbkdf2")
+                    flash("Password changed", category="success")
+                    db.session.commit()
+            else:
+                flash("Old password is wrong", category="error")
+        else:
+            flash("can't find user", category="error")
+    return render_template("account.html", user=current_user)
