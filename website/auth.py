@@ -48,7 +48,7 @@ def sign_up():
         elif len(username) < 1:
             flash("Username can not be empty.", category="error")
         elif len(password1) < 6:
-            flash("Password is too short.", category="error")
+            flash("Password should be at least 6 characters.", category="error")
         else:
             # user = User(email=email, username=username, password=generate_password_hash(password1, method="pbkdf2"))
             user = User(email, username, generate_password_hash(password1, method="pbkdf2"))
@@ -86,7 +86,7 @@ def account():
         if user:
             if check_password_hash(current_user.password, oldPassword):
                 if len(newPassword) < 6:
-                    flash("New password is too short", category="error")
+                    flash("New password should be at least 6 characters.", category="error")
                 else:
                     current_user.password = generate_password_hash(newPassword, method="pbkdf2")
                     flash("Password changed", category="success")
