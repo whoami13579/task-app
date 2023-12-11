@@ -41,11 +41,27 @@ def view_group(group_id):
         date_format = "%Y-%m-%d"
         begin = datetime.strptime(begin, date_format)
         end = datetime.strptime(end, date_format)
+
+        beginString = str(begin)
+        endString = str(end)
+        year1 = int(beginString[0:4])
+        year2 = int(endString[0:4])
+        month1 = int(beginString[5:7])
+        month2 = int(endString[5:7])
+        day1 = int(beginString[8:10])
+        day2 = int(endString[8:10])
+
         text = request.form.get("text")
         if begin is None or end is None:
             flash("error", category="error")
         elif len(text) == 0:
             flash("Task can't be empty.", category="error")
+        elif year2 < year1:
+            flash("The task ends before it begins", category="error")
+        elif (year1 <= year2) and (month2 < month1):
+            flash("The task ends before it begins", category="error")
+        elif (year1 <= year2) and (month1 <= month2) and (day2 < day1):
+            flash("The task ends before it begins", category="error")
         else:
             new_task = Task(text, begin, end)
             group.tasks.append(new_task)
